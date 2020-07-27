@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+    
+      .classes {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .day1, .day2 {
+        padding: 10px;
+      }
+
+    </style>
+  </head>
+  <body onload="loaded()">
+    <div class="main">
+      <p>Calendar Name: <input type="text" id="calendarName" value="School Agenda"></p>
+      <p>Start Date: <input type="date" id="startDate"></p>
+      <p>End Date: <input type="date" id="endDate"></p>
+      <br>
+      <div class="classes">
+        <div class="day1">
+          <p>A1: <input type="text" name="" value="class1" id="A1"></p>
+          <p>A2: <input type="text" name="" value="class2" id="A2"></p>
+          <p>A3: <input type="text" name="" value="class3" id="A3"></p>
+          <p>A4: <input type="text" name="" value="class4" id="A4"></p>
+        </div>
+        <div class="day2">
+          <p>B1: <input type="text" name="" value="class5" id="B1"></p>
+          <p>B2: <input type="text" name="" value="class6" id="B2"></p>
+          <p>B3: <input type="text" name="" value="class7" id="B3"></p>
+          <p>B4: <input type="text" name="" value="class8" id="B4"></p>
+        </div>
+      </div>
+      <p>keep the text field empty if you want to leave a section blank</p>
+      <br><br>
+      <button onclick="runMain()">Generate</button>
+    </div>
+    
+    
+    
+    
+
+    <script>
+      
+      function loaded() {
+        Date.prototype.toDateInputValue = (function() {
+          var local = new Date(this);
+          local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+          return local.toJSON().slice(0,10);
+        });
+        startDate.value = new Date().toDateInputValue();
+        endDate.value = '2020-06-06';
+      }
+
+      function runMain() {
+        alert("Please do not close this page until another alert box pops up!")
+        const a1 = A1.value || undefined;
+        const a2 = A2.value || undefined;
+        const a3 = A3.value || undefined;
+        const a4 = A4.value || undefined;
+        const b1 = B1.value || undefined;
+        const b2 = B2.value || undefined;
+        const b3 = B3.value || undefined;
+        const b4 = B4.value || undefined;
+
+        const classes = {
+          "A Day": [a1, a2, a3, a4],
+          "B Day": [b1, b2, b3, b4],
+          "C Day": [a3, a4, a1, a2],
+          "D Day": [b3, b4, b1, b2],
+          "Day A": [a1, a2, a3, a4],
+          "Day B": [b1, b2, b3, b4],
+          "Day C": [a3, a4, a1, a2],
+          "Day D": [b3, b4, b1, b2],
+        };
+        console.log(classes);
+
+        google.script.run.withSuccessHandler(_ => {
+          console.log('done');
+          alert('Done! Now you can close this page. Enjoy your new calendar :)');
+        }).withFailureHandler(err => {
+          console.log(err);
+        }).main(calendarName.value, classes, startDate.value, endDate.value);
+      }
+    </script>
+  </body>
+</html>
